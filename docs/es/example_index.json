@@ -1,0 +1,80 @@
+{
+    "_id": 123, 
+    "name": "У меня не работает РБС",
+    "system": "РБС",
+    "sevice": "У меня не работает",
+    "system_alias":["РБС", "RBS"],
+    "form_id": 1233,
+    "service_attributes":{
+        "service_owner_department": "Департамент бизнесс-технологий",
+        "service_owner_management": "Управление сопровождения систем",
+        "service_owner_division": "Отдел сопровождения",
+        "calendar":{
+            "timetable_name": "production_calendar",
+            "supprt_time": {
+                "start_support_time_msk": 5,
+                "end_support_time_msk": 22
+            }
+        },
+        "manager":{
+            "name": "Инкина Екатерина",
+            "email": "inkinaea@sovcombank.ru"
+        },
+        "plan_time_minutes": 1440
+    },
+    "main_teams": {
+        "1233": {
+            "name": "Техническая поддержка 1я линия",
+            "service_owner_department": "Департамент технического спровождения",
+            "service_owner_management": "Управление дистанционного ИТ сервиса",
+            "service_owner_division": "Отдел 1 линии поддержки",
+            "timetable_name": "24/7",
+            "supprt_time": {
+                "start_support_time_msk": 0,
+                "end_support_time_msk": 23.99
+            },
+            "plan_time_minutes": 240,
+            "stage": 2,
+            "manager": {
+                "name": "Гунин",
+                "email": "gunink@sovcombank.ru"
+            }
+    },
+    "5555": {
+        "name": "Администраторы РБС",
+        "service_owner_department": "Департамент бизнесс-технологий",
+        "service_owner_management": "Управление сопровождения систем",
+        "service_owner_division": "Отдел сопровождения",
+        "timetable_name": "production_calendar",
+        "supprt_time": {
+            "start_support_time_msk": 5,
+            "end_support_time_msk": 22
+        },
+        "plan_time_minutes": 540,
+        "stage": 6,
+        "manager": {
+            "name": "Инкина Екатерина",
+            "email": "inkinaea@sovcombank.ru"
+        } 
+    }
+    },
+    "competency_teams":{
+        "6666": {
+            "name": "Администраторы Windows",
+            "service_owner_department": "Департамент инфраструктуры",
+            "service_owner_management": "Управление Windows администрирования",
+            "service_owner_division": "Отдел сопровождения терминальных сервисров",
+            "timetable_name": "production_calendar",
+            "supprt_time": {
+                "start_support_time_msk": 5,
+                "end_support_time_msk": 18
+            },
+            "plan_time_minutes": 180,
+            "stage": 1,
+            "manager": {
+                "name": "Инкина Екатерина",
+                "email": "inkinaea@sovcombank.ru"
+            } 
+        }
+    }
+}
