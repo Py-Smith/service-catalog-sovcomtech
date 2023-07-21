@@ -3,6 +3,7 @@ version: '3.7'
 services:
 
   elasticsearch:
+    platform: linux/x86_64
     image: elasticsearch:7.5.0
     container_name: elasticsearch
     environment:
@@ -26,6 +27,7 @@ services:
       - 9300:9300
 
   kibana:
+    platform: linux/x86_64
     container_name: kibana
     image: kibana:7.5.0
     environment:
