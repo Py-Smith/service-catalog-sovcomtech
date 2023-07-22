@@ -46,6 +46,11 @@ class SystemService(models.Model):
     system_service_main_teams = models.ManyToManyField('SystemServiceMainTeams',  blank=True)
     system_service_competence_teams = models.ManyToManyField('SystemServiceСompetenceTeams',  blank=True)
 
+    class Meta:
+        verbose_name = "Система-сервис"
+        verbose_name_plural = "Система-сервис"
+    
+    
     def __str__(self):
         return f'Service: {self.system}-{self.service} '
 
@@ -58,6 +63,12 @@ class SystemServiceMainTeams(models.Model):
                                                            MaxValueValidator(200)])
    # system_service = models.ForeignKey(SystemService, on_delete = models.CASCADE)
     pyrus_stage = models.IntegerField(null=False)
+    start_support_time = models.DecimalField(decimal_places=2, max_digits=5, null=False,
+                                    default=0, validators=[MinValueValidator(0),
+                                                           MaxValueValidator(24)])
+    end_support_time = models.DecimalField(decimal_places=2, max_digits=5, null=False,
+                                    default=24, validators=[MinValueValidator(0),
+                                                           MaxValueValidator(24)])
     
 
     def __str__(self):
@@ -73,7 +84,24 @@ class SystemServiceСompetenceTeams(models.Model):
                                                            MaxValueValidator(200)])
    # system_service = models.ForeignKey(SystemService, on_delete = models.CASCADE)
     pyrus_stage = models.IntegerField(null=False)
+    start_support_time = models.DecimalField(decimal_places=2, max_digits=5, null=False,
+                                    default=0, validators=[MinValueValidator(0),
+                                                           MaxValueValidator(24)])
+    end_support_time = models.DecimalField(decimal_places=2, max_digits=5, null=False,
+                                    default=24, validators=[MinValueValidator(0),
+                                                           MaxValueValidator(24)])
     
 
     def __str__(self):
         return f'{self.role_id} | {self.role_name} | {self.pyrus_stage}'
+
+class PyrusForms(models.Model):  
+    form_id = models.IntegerField(null=False)
+    form_name = models.CharField(max_length=30, null=False, default='-empty-')
+
+    def __str__(self) -> str:
+        return f'{self.form_id} | {self.form_name} '
+
+class SystemServicePyrusForms(models.Model):
+    form = models.ForeignKey(PyrusForms, on_delete = models.CASCADE, blank=True, null=True)
+    system_service = models.ManyToManyField('SystemService',  blank=True)

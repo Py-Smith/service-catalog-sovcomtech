@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import (System, Service, SystemAlias, SystemService,
-                     SystemServiceMainTeams, SystemServiceСompetenceTeams)
+                     SystemServiceMainTeams, SystemServiceСompetenceTeams,
+                     SystemServicePyrusForms, PyrusForms)
 
 # Register your models here.
 
@@ -29,13 +30,15 @@ class SystemAliasAdmin(admin.ModelAdmin):
 
 @admin.register(SystemService)
 class SystemServiceAdmin(admin.ModelAdmin):
-    list_display = ('system', 'service', )
+    list_display = ('system', 'service', 'plan_time', 'start_support_time',
+                    'end_support_time', )
     # fieldsets=(        
     #    ("My Group",{
     #        "fields": (tuple(['system','service']),
     #                   ),
     #                   }), 
     # )
+    list_filter = ('system', 'service', )
     filter_horizontal = ('system_service_main_teams', 'system_service_competence_teams', )
 
 @admin.register(SystemServiceMainTeams)
@@ -47,3 +50,12 @@ class SystemServiceMainTeamsAdmin(admin.ModelAdmin):
 class SystemServiceСompetenceTeamsAdmin(admin.ModelAdmin):
     list_display = ('role_id', 'role_name', 'plan_time', 'pyrus_stage', )
     
+
+@admin.register(SystemServicePyrusForms)
+class SystemServicePyrusFormsAdmin(admin.ModelAdmin):
+    list_display = ('form', )
+    filter_horizontal = ('system_service',  )
+
+@admin.register(PyrusForms)
+class PyrusFormsAdmin(admin.ModelAdmin):
+    list_display = ('form_id', 'form_name', )
