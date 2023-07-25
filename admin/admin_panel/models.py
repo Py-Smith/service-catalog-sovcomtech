@@ -7,7 +7,6 @@ class Service(models.Model):
     name = models.CharField(max_length=30, null=False)
     description = models.CharField(max_length=255, null=False)
 
-
     def __str__(self):
         return self.name
 
@@ -16,7 +15,6 @@ class System(models.Model):
     name = models.CharField(max_length=30, null=False)
     description = models.CharField(max_length=255, null=False)
     service = models.ManyToManyField('Service')
-    #alias_system = models.ManyToManyField('SystemAlias')
 
     def __str__(self):
         return self.name
@@ -40,8 +38,7 @@ class SystemService(models.Model):
     end_support_time = models.DecimalField(decimal_places=2, max_digits=5, null=False,
                                     default=24, validators=[MinValueValidator(0),
                                                            MaxValueValidator(24)])
-    # TODO: Add calendar
-    # TODO: Add form_id and releationships for table Pyrus_Forms
+    timetable = models.ForeignKey('TimeTable', on_delete = models.CASCADE, default=1)
     # TODO: Add supervizor_id releationships for table Users
     system_service_main_teams = models.ManyToManyField('SystemServiceMainTeams',  blank=True)
     system_service_competence_teams = models.ManyToManyField('SystemServiceСompetenceTeams',  blank=True)
@@ -55,13 +52,11 @@ class SystemService(models.Model):
         return f'Service: {self.system}-{self.service} '
 
 class SystemServiceMainTeams(models.Model):
-
     role_id = models.IntegerField(blank=False, null=False)
     role_name = models.CharField(max_length=30, null=False, default='no name')
     plan_time = models.DecimalField(decimal_places=2, max_digits=5, null=False,
                                     default=0, validators=[MinValueValidator(0),
                                                            MaxValueValidator(200)])
-   # system_service = models.ForeignKey(SystemService, on_delete = models.CASCADE)
     pyrus_stage = models.IntegerField(null=False)
     start_support_time = models.DecimalField(decimal_places=2, max_digits=5, null=False,
                                     default=0, validators=[MinValueValidator(0),
@@ -76,13 +71,11 @@ class SystemServiceMainTeams(models.Model):
     
 
 class SystemServiceСompetenceTeams(models.Model):
-
     role_id = models.IntegerField(blank=False, null=False)
     role_name = models.CharField(max_length=30, null=False, default='no name')
     plan_time = models.DecimalField(decimal_places=2, max_digits=5, null=False,
                                     default=0, validators=[MinValueValidator(0),
                                                            MaxValueValidator(200)])
-   # system_service = models.ForeignKey(SystemService, on_delete = models.CASCADE)
     pyrus_stage = models.IntegerField(null=False)
     start_support_time = models.DecimalField(decimal_places=2, max_digits=5, null=False,
                                     default=0, validators=[MinValueValidator(0),
@@ -105,3 +98,25 @@ class PyrusForms(models.Model):
 class SystemServicePyrusForms(models.Model):
     form = models.ForeignKey(PyrusForms, on_delete = models.CASCADE, blank=True, null=True)
     system_service = models.ManyToManyField('SystemService',  blank=True)
+
+    def __str__(self) -> str:
+        return f'{self.form} | {self.system_service}'
+
+class TimeTable(models.Model):
+    name = models.CharField(max_length=255, null=False, default='-empty-')
+    description = models.CharField(max_length=255, null=False, default='-empty-')
+
+    def __str__(self) -> str:
+        return f'{self.name} | {self.description}'
+
+class TimeTableDate(models.Model):
+    date = models.DateField(null=False)
+    is_work = models.BooleanField(null=False)
+    week = models.IntegerField(null=False)
+    year = models.IntegerField(null=False)
+    qr = models.IntegerField(null=False)
+    month = models.IntegerField(null=True, blank=True)
+    timetable = models.ForeignKey('TimeTable', on_delete = models.CASCADE, null=True)
+
+    def __str__(self) -> str:
+        return f'{self.date}'

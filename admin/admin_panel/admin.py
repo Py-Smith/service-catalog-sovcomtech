@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import (System, Service, SystemAlias, SystemService,
                      SystemServiceMainTeams, SystemServiceСompetenceTeams,
-                     SystemServicePyrusForms, PyrusForms)
+                     SystemServicePyrusForms, PyrusForms, TimeTable,
+                     TimeTableDate)
 
 # Register your models here.
 
@@ -32,12 +33,6 @@ class SystemAliasAdmin(admin.ModelAdmin):
 class SystemServiceAdmin(admin.ModelAdmin):
     list_display = ('system', 'service', 'plan_time', 'start_support_time',
                     'end_support_time', )
-    # fieldsets=(        
-    #    ("My Group",{
-    #        "fields": (tuple(['system','service']),
-    #                   ),
-    #                   }), 
-    # )
     list_filter = ('system', 'service', )
     filter_horizontal = ('system_service_main_teams', 'system_service_competence_teams', )
 
@@ -59,3 +54,14 @@ class SystemServicePyrusFormsAdmin(admin.ModelAdmin):
 @admin.register(PyrusForms)
 class PyrusFormsAdmin(admin.ModelAdmin):
     list_display = ('form_id', 'form_name', )
+
+
+#@admin.register(TimeTableDate)
+class TimeTableDateInline(admin.TabularInline):
+    model = TimeTableDate
+    list_display = ('date', 'is_work', 'week', 'year', 'qr', 'month', )
+
+@admin.register(TimeTable)
+class TimeTableAdmin(admin.ModelAdmin):
+    inlines = (TimeTableDateInline, )
+    list_display = ('name', 'description', )
