@@ -39,7 +39,7 @@ class SystemService(models.Model):
                                     default=24, validators=[MinValueValidator(0),
                                                            MaxValueValidator(24)])
     timetable = models.ForeignKey('TimeTable', on_delete = models.CASCADE, default=1)
-    # TODO: Add supervizor_id releationships for table Users
+    supervizor_id = models.ForeignKey('PyrusUsers', on_delete = models.CASCADE, default=1)
     system_service_main_teams = models.ManyToManyField('SystemServiceMainTeams',  blank=True)
     system_service_competence_teams = models.ManyToManyField('SystemServiceСompetenceTeams',  blank=True)
 
@@ -120,3 +120,14 @@ class TimeTableDate(models.Model):
 
     def __str__(self) -> str:
         return f'{self.date}'
+    
+class PyrusUsers(models.Model):
+    pyrus_id = models.IntegerField(blank=False, null=False)
+    email = models.EmailField(max_length=255, null=False)
+    username = models.CharField(max_length=255, null=False, default='-empty-')
+    department = models.CharField(max_length=255, null=False, default='-empty-')
+    management = models.CharField(max_length=255, null=False, default='-empty-')
+    divizion = models.CharField(max_length=255, null=False, default='-empty-')
+
+    def __str__(self) -> str:
+        return f'{self.email} | {self.username} '

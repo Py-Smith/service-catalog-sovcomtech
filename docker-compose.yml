@@ -4,39 +4,29 @@ services:
 
   elasticsearch:
     platform: linux/x86_64
-    image: elasticsearch:7.5.0
+    image: elasticsearch:7.17.8
     container_name: elasticsearch
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
       #- elasticsearch.username=kibana
       #- elasticsearch.password=your-password
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    cap_add:
-      - IPC_LOCK
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
       - 9300:9300
 
-  kibana:
-    platform: linux/x86_64
-    container_name: kibana
-    image: kibana:7.5.0
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  postgres:
+    image: postgres:13
     ports:
-      - 5601:5601
-    depends_on:
-      - elasticsearch
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    env_file: .env
+  
 
 volumes:
   elasticsearch-data:
     driver: local
+  pg_data:

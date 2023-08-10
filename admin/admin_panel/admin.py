@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (System, Service, SystemAlias, SystemService,
                      SystemServiceMainTeams, SystemServiceСompetenceTeams,
                      SystemServicePyrusForms, PyrusForms, TimeTable,
-                     TimeTableDate)
+                     TimeTableDate, PyrusUsers)
 
 # Register your models here.
 
@@ -65,3 +65,8 @@ class TimeTableDateInline(admin.TabularInline):
 class TimeTableAdmin(admin.ModelAdmin):
     inlines = (TimeTableDateInline, )
     list_display = ('name', 'description', )
+
+@admin.register(PyrusUsers)
+class PyrusUsersAdmin(admin.ModelAdmin):
+    list_display = ('pyrus_id', 'email', 'username','department','management','divizion',)
+
