@@ -11,10 +11,19 @@ class Service(models.Model):
         return self.name
 
 
+class SystemCategory(models.Model):
+    name = models.CharField(max_length=30, null=False)
+    description = models.CharField(max_length=255, null=False)
+
+
+    def __str__(self):
+        return self.name
+
+
 class System(models.Model):
     name = models.CharField(max_length=30, null=False)
     description = models.CharField(max_length=255, null=False)
-    service = models.ManyToManyField('Service')
+    category  = models.ForeignKey(SystemCategory, on_delete = models.CASCADE, default = -1)
 
     def __str__(self):
         return self.name

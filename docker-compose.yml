@@ -1,7 +1,7 @@
+name: service_catalog
 version: '3.7'
 
 services:
-
   elasticsearch:
     platform: linux/x86_64
     image: elasticsearch:7.17.8
@@ -16,17 +16,37 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+    networks:
+      - service_catalog_net
+  admin_panel:
+    container_name: admin_panel
+    build: ./admin/
+    environment:
+      - DB_PASSWORD=123qwe
+      - DB_USER=app
+      - DB_NAME=service_catalog
+      - DB_PORT=5432
+      - DB_HOST=postgres13
+    ports:
+      - 8082:8082
+    depends_on:
+      - postgres13
+    networks:
+      - service_catalog_net
 
-  postgres:
+  postgres13:
     image: postgres:13
     ports:
       - 5432:5432
     volumes:
       - pg_data:/var/lib/postgresql/data
     env_file: .env
-  
-
+    networks:
+      - service_catalog_net
 volumes:
   elasticsearch-data:
     driver: local
   pg_data:
+
+networks:
+  service_catalog_net:
