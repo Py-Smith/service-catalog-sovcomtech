@@ -31,10 +31,10 @@ class SystemInfoService:
         #           System.category_id==SystemCategory.id)
         #     )
         result = await self.session.execute(
-            select(System.id.label('system_id'),
-                   System.name.label('system_name'),
-                   System.description.label('system_description'),
-                   System.category_id.label('category_id')
+            select(System.id,
+                   System.name,
+                   System.description,
+                   System.category_id
                    )
             .select_from(System)
             )
@@ -43,9 +43,9 @@ class SystemInfoService:
     
     async def get_system_info(self, system_id: int) -> dict:
         result = await self.session.execute(
-            select(System.id.label('system_id'),
-                   System.name.label('system_name'),
-                   System.description.label('system_description')
+            select(System.id,
+                   System.name,
+                   System.description
                    )
             .select_from(System)
             .where(System.id == system_id)

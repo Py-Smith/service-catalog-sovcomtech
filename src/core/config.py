@@ -1,18 +1,22 @@
-from pydantic import BaseConfig
+
+from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
+from pydantic import Field
+
+load_dotenv()
 
 
-class Settings(BaseConfig):
+class Settings(BaseSettings):
 
-    project_name: str = 'movies'
+    project_name: str = Field(..., env='PROJECT_NAME')
+    db_host: str = Field(..., env='DB_HOST')
+    db_port: int = Field(..., env='DB_PORT')
+    db_user: str = Field(..., env='DB_USER')
+    db_password: str = Field(..., env='DB_PASSWORD')
+    db_name: str = Field(..., env='DB_NAME')
 
-    redis_host: str = '127.0.0.1'
-    redis_port: int = 6379
-
-    elastic_schema: str = 'http://'
-    elastic_host: str = '127.0.0.1'
-    elastic_port: int = 9200
-
-    cache_expire_in_seconds: int = 300
+    class Config:
+        env_file = ".env"
 
 
 settings = Settings()
