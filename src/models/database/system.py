@@ -1,9 +1,8 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, ForeignKey, Integer, String
 
 from db.postgres import Base
 
- 
+
 class SystemCategory(Base):
     __tablename__ = "admin_panel_systemcategory"
 
