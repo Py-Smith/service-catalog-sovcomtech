@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     redis_host: str = Field(..., env='REDIS_HOST')
     redis_port: str = Field(..., env='REDIS_PORT')
 
-    redis_ex: int = Field(400, env='REDIS_EX')
+    redis_ex: int = Field(20, env='REDIS_EX')
 
     class Config:
         env_file = ".env"

@@ -50,7 +50,7 @@ class SystemService(models.Model):
                                            default=24, validators=[MinValueValidator(0),
                                                                    MaxValueValidator(24)])
     timetable = models.ForeignKey('TimeTable', on_delete=models.CASCADE, default=1)
-    supervizor_id = models.ForeignKey('PyrusUsers', on_delete=models.CASCADE, default=1)
+    supervizor = models.ForeignKey('PyrusUsers', on_delete=models.CASCADE, default=1)
     system_service_main_teams = models.ManyToManyField('SystemServiceMainTeams', blank=True)
     system_service_competence_teams = models.ManyToManyField('SystemServiceСompetenceTeams', blank=True)
 
