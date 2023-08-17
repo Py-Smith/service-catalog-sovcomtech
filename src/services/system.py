@@ -83,7 +83,7 @@ class SystemInfoService:
                                           'email', PyrusUsers.email,
                                           'department', PyrusUsers.department,
                                           'management', PyrusUsers.management,
-                                          'didvizion', PyrusUsers.divizion).label('owner'),
+                                          'divizion', PyrusUsers.divizion).label('owner'),
                    func.json_build_object('id', Timetable.id,
                                           'name', Timetable.name,
                                           'description', Timetable.description).label('calendar'))

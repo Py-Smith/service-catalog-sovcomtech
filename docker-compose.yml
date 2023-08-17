@@ -3,7 +3,6 @@ version: '3.7'
 
 services:
   elasticsearch:
-    platform: linux/x86_64
     image: elasticsearch:7.17.8
     container_name: elasticsearch
     environment:
@@ -45,7 +44,6 @@ services:
     networks:
       - service_catalog_net
 
-
   redis:
     image: redis:7.0.8
     container_name: redis-prod
@@ -55,6 +53,30 @@ services:
       - redis_data:/data
     networks:
       - service_catalog_net
+
+  catalog_api:
+    container_name: catalog_api
+    build: ./src/
+    environment:
+      - PROJECT_NAME=api_sc
+
+      - DB_HOST=postgres13
+      - DB_PORT=5432
+      - DB_USER=app
+      - DB_PASSWORD=123qwe
+      - DB_NAME=service_catalog
+      
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - 8011:8011
+    networks:
+      - service_catalog_net
+    depends_on:
+      - postgres13
+      - redis
+
+
 volumes:
   elasticsearch-data:
     driver: local

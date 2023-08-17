@@ -8,6 +8,7 @@ from core.config import settings as st
 
 DATABASE_URL = f'postgresql+asyncpg://{st.db_user}:{st.db_password}@{st.db_host}:{st.db_port}/{st.db_name}'
 
+# TODO убрать Echo, что бы не выводи сгенерированный SQL
 engine = create_async_engine(DATABASE_URL, echo=True)
 Base = declarative_base()
 
