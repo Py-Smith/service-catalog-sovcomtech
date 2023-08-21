@@ -59,6 +59,7 @@ class SystemService(Base):
     system_id = Column(Integer, ForeignKey('System.id'))
     timetable_id = Column(Integer, ForeignKey('Timetable.id'))
     supervizor_id = Column(Integer, ForeignKey('PyrusUsers.id'))
+    method_providing_service_id = Column(Integer, ForeignKey('MethodProvidingService.id'))
 
 
 class SystemServiceMainTeams(Base):
@@ -99,3 +100,11 @@ class CompetenceTeams(Base):
     pyrus_stage = Column(Integer)
     start_support_time = Column(Float)
     end_support_time = Column(Float)
+
+
+class MethodProvidingService(Base):
+    __tablename__ = "admin_panel_methodprovidingservice"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, index=True)
+    description = Column(String)

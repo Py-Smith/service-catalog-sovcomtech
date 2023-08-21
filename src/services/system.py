@@ -9,8 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.config import settings
 from db.postgres import get_session
 from db.redis import get_redis
-from models.database.system import (PyrusUsers, Service, System, SystemService,
-                                    Timetable)
+from models.database.system import (MethodProvidingService, PyrusUsers,
+                                    Service, System, SystemService, Timetable)
 
 
 class SystemInfoService:
@@ -76,7 +76,8 @@ class SystemInfoService:
                                           'description', Service.description,
                                           'time_to_request', SystemService.plan_time,
                                           'start_support_time', SystemService.start_support_time,
-                                          'end_support_time', SystemService.end_support_time,).label('service'),
+                                          'end_support_time', SystemService.end_support_time,
+                                          'method_providing', MethodProvidingService.name).label('service'),
                    func.json_build_object('id', PyrusUsers.id,
                                           'name', PyrusUsers.username,
                                           'pyrus_id', PyrusUsers.pyrus_id,
@@ -92,6 +93,7 @@ class SystemInfoService:
             .join(Service, SystemService.service_id == Service.id)
             .join(PyrusUsers, SystemService.supervizor_id == PyrusUsers.id)
             .join(Timetable, SystemService.timetable_id == Timetable.id)
+            .join(MethodProvidingService, SystemService.method_providing_service_id == MethodProvidingService.id)
             .where(SystemService.system_id == system_id))
 
         try:

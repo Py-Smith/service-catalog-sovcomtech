@@ -1,35 +1,29 @@
 from django.contrib import admin
 
-from .models import (PyrusForms, PyrusUsers, Service, System, SystemAlias,
-                     SystemCategory, SystemService, SystemServiceMainTeams,
-                     SystemServicePyrusForms, SystemServiceСompetenceTeams,
-                     TimeTable, TimeTableDate)
+from .models import (MethodProvidingService, PyrusForms, PyrusUsers, Service,
+                     System, SystemAlias, SystemCategory, SystemService,
+                     SystemServiceMainTeams, SystemServicePyrusForms,
+                     SystemServiceСompetenceTeams, TimeTable, TimeTableDate)
 
 
 @admin.register(SystemCategory)
 class SystemCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', )
-
     list_filter = ('name', )
-
     search_fields = ('name', 'description', )
 
 
 @admin.register(System)
 class SystemAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', )
-
     list_filter = ('name', )
-
     search_fields = ('name', 'description', )
 
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', )
-
     list_filter = ('name', )
-
     search_fields = ('name', 'description', )
 
 
@@ -37,6 +31,7 @@ class ServiceAdmin(admin.ModelAdmin):
 class SystemAliasAdmin(admin.ModelAdmin):
     list_display = ('alias', )
     search_fields = ('alias', )
+    filter_horizontal = ('system', )
 
 
 @admin.register(SystemService)
@@ -82,3 +77,8 @@ class TimeTableAdmin(admin.ModelAdmin):
 @admin.register(PyrusUsers)
 class PyrusUsersAdmin(admin.ModelAdmin):
     list_display = ('pyrus_id', 'email', 'username', 'department', 'management', 'divizion', )
+
+
+@admin.register(MethodProvidingService)
+class MethodProvidingServiceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description', )
