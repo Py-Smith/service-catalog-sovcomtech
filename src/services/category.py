@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.postgres import get_session
 from db.redis import get_redis
-from models.database.system import SystemCategory
+from models.database.system import System, SystemCategory
 from utils.cache import get_data_from_cache
 
 
@@ -46,6 +46,24 @@ class SystemCategoryInfoService:
             return result
         except TypeError:
             return {}
+
+    # TODO: подумать как убрать паараметр request: Request из функции
+    @get_data_from_cache
+    async def get_system_category_by_id(self, request: Request, category_id: int) -> list:
+        """Get information about system by id"""
+        query = await self.session.execute(
+            select(System.id,
+                   System.name,
+                   System.description
+                   )
+            .select_from(System)
+            .where(System.category_id == category_id))
+
+        try:
+            result: list = [dict(c) for c in query.mappings().all()]
+            return result
+        except TypeError:
+            return []
 
 
 @lru_cache()
