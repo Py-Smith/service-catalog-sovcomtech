@@ -1,16 +1,16 @@
 from functools import lru_cache
 
-import orjson
 from aioredis import Redis
 from fastapi import Depends, Request
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.config import settings
 from db.postgres import get_session
 from db.redis import get_redis
 from models.database.system import (MethodProvidingService, PyrusUsers,
                                     Service, System, SystemService, Timetable)
+from models.response.system import PaginateSystemModel, SystemModel
+from utils.cache import get_data_from_cache
 
 
 class SystemInfoService:
@@ -19,32 +19,24 @@ class SystemInfoService:
         self.session = session
         self.redis = redis
 
-    async def get_all_systems(self, request: Request) -> list:
+    @get_data_from_cache
+    async def get_all_systems(self, *, request: Request,
+                              page: int, limit: int) -> PaginateSystemModel:
         """Get information about all systems"""
 
-        cache_data = await self.redis.get(request.url.path)
-        if cache_data:
-            return orjson.loads(cache_data)
+        select_expression = select(System.id,
+                                   System.name,
+                                   System.description
+                                   ).select_from(System).offset(page * limit).limit(limit)
 
-        query = await self.session.execute(
-            select(System.id,
-                   System.name,
-                   System.description,
-                   System.category_id
-                   )
-            .select_from(System))
+        query = await self.session.execute(select_expression)
+        result: list = [SystemModel(**dict(c)) for c in query.mappings().all()]
+        model = PaginateSystemModel(result=result, page=page, limit=limit, count=len(result))
+        return model
 
-        result: list = [dict(c) for c in query.mappings().all()]
-        await self.redis.set(name=request.url.path, value=orjson.dumps(result), ex=settings.redis_ex)
-
-        return result
-
-    async def get_system_info(self, request: Request, system_id: int) -> dict:
+    @get_data_from_cache
+    async def get_system_info(self, *, request: Request, system_id: int) -> dict:
         """Get information about system by id"""
-
-        cache_data = await self.redis.get(request.url.path)
-        if cache_data:
-            return orjson.loads(cache_data)
 
         query = await self.session.execute(
             select(System.id,
@@ -56,17 +48,13 @@ class SystemInfoService:
 
         try:
             result: dict = dict(query.mappings().first())  # type: ignore
-            await self.redis.set(name=request.url.path, value=orjson.dumps(result), ex=settings.redis_ex)
             return result
         except TypeError:
             return {}
 
-    async def get_system_service_info(self, request: Request, system_id: int) -> list:
+    @get_data_from_cache
+    async def get_system_service_info(self, *, request: Request, system_id: int) -> list:
         """Get information about system by id"""
-
-        cache_data = await self.redis.get(request.url.path)
-        if cache_data:
-            return orjson.loads(cache_data)
 
         query = await self.session.execute(
             select(SystemService.id.label('id'),
@@ -98,7 +86,6 @@ class SystemInfoService:
 
         try:
             result: list = [dict(c) for c in query.mappings().all()]  # type: ignore
-            await self.redis.set(name=request.url.path, value=orjson.dumps(result), ex=settings.redis_ex)
             return result
         except TypeError:
             return []

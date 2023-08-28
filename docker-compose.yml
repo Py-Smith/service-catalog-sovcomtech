@@ -3,21 +3,28 @@ version: '3.7'
 
 services:
   elasticsearch:
-    image: elasticsearch:7.17.8
+    image: elasticsearch:7.17.9
     container_name: elasticsearch
     environment:
-      - xpack.security.enabled=false
-      - discovery.type=single-node
-      #- elasticsearch.username=kibana
-      #- elasticsearch.password=your-password
+      xpack.security.enabled: "false"
+      discovery.type: "single-node"
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
-      - 9300:9300
     networks:
       - service_catalog_net
   
+  kibana:
+    image: kibana:7.17.9
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    networks:
+      - service_catalog_net
+
+
   admin_panel:
     container_name: admin_panel
     build: ./admin/
@@ -68,6 +75,10 @@ services:
       
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+
+      - ES_HOST=elastic
+      - ES_PORT=9200
+      - ES_HTTP_PROTOCOL=http
     ports:
       - 8011:8011
     networks:

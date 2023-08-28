@@ -18,8 +18,11 @@ class Settings(BaseSettings):
 
     redis_host: str = Field(..., env='REDIS_HOST')
     redis_port: str = Field(..., env='REDIS_PORT')
-
     redis_ex: int = Field(20, env='REDIS_EX')
+
+    es_host: str = Field(..., env='ES_HOST')
+    es_port: str = Field(..., env='ES_PORT')
+    es_http_protocol: str = Field(..., env='ES_HTTP_PROTOCOL')
 
     class Config:
         env_file = ".env"
