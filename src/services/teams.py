@@ -10,10 +10,13 @@ from db.redis import get_redis
 from models.database.system import (CompetenceTeams, MainTeams,
                                     SystemServiceCompetenceTeams,
                                     SystemServiceMainTeams)
+from models.response.teams import (CompetenceTeamsListModel,
+                                   CompetenceTeamsModel, MainTeamsListModel,
+                                   MainTeamsModel)
 from utils.cache import get_data_from_cache
 
 
-class SystemServiceTeams:
+class TeamsService:
     """Class service for get information about systems"""
     def __init__(self, session: AsyncSession, redis: Redis):
         self.session = session
@@ -21,7 +24,7 @@ class SystemServiceTeams:
 
     # TODO: подумать как убрать паараметр request: Request из функции
     @get_data_from_cache
-    async def get_main_teams_by_id(self, request: Request, service_system_id: int) -> list:
+    async def get_main_teams_by_id(self, *, request: Request, service_system_id: int) -> list:
         """Get information about system by id"""
         query = await self.session.execute(
             select(MainTeams.id,
@@ -36,15 +39,12 @@ class SystemServiceTeams:
             .join(MainTeams, SystemServiceMainTeams.systemservicemainteams_id == MainTeams.id)
             .where(SystemServiceMainTeams.systemservice_id == service_system_id))
 
-        try:
-            result: list = [dict(c) for c in query.mappings().all()]
-            return result
-        except TypeError:
-            return []
+        result: list = [MainTeamsModel(**dict(c)) for c in query.mappings().all()]
+        return MainTeamsListModel(result=result)
 
     # TODO: подумать как убрать паараметр request: Request из функции
     @get_data_from_cache
-    async def get_competence_teams_by_id(self, request: Request, service_system_id: int) -> list:
+    async def get_competence_teams_by_id(self, *, request: Request, service_system_id: int) -> list:
         """Get information about system by id"""
         query = await self.session.execute(
             select(CompetenceTeams.id,
@@ -59,16 +59,13 @@ class SystemServiceTeams:
             .join(CompetenceTeams, SystemServiceCompetenceTeams.systemserviceсompetenceteams_id == CompetenceTeams.id)
             .where(SystemServiceCompetenceTeams.systemservice_id == service_system_id))
 
-        try:
-            result: list = [dict(c) for c in query.mappings().all()]
-            return result
-        except TypeError:
-            return []
+        result: list = [CompetenceTeamsModel(**dict(c)) for c in query.mappings().all()]
+        return CompetenceTeamsListModel(result=result)
 
 
 @lru_cache()
 def get_system_service_teams(
         session: AsyncSession = Depends(get_session),
         redis: Redis = Depends(get_redis)
-) -> SystemServiceTeams:
-    return SystemServiceTeams(session, redis)
+) -> TeamsService:
+    return TeamsService(session, redis)

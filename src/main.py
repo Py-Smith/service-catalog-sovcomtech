@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from redis.asyncio import Redis
 
-from api.v1 import category, service_system, system
+from api.v1 import category, system, teams
 from core.config import settings
 from db import elastic, redis
 
@@ -31,7 +31,7 @@ async def shutdown():
 
 app.include_router(system.router, prefix='/api/v1/system', tags=['system'])
 app.include_router(category.router, prefix='/api/v1/category', tags=['category'])
-app.include_router(service_system.router, prefix='/api/v1/service_system', tags=['service_system'])
+app.include_router(teams.router, prefix='/api/v1/teams', tags=['teams'])
 # FIXME: Убрать на проде. Переключить на гуникорн
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8011, reload=True, workers=2)

@@ -10,7 +10,10 @@ from services.system import SystemInfoService, get_systems
 router = APIRouter()
 
 
-@router.get('/', response_model=PaginateSystemModel, description=SystemApiDescription.all_system_api)
+@router.get('/',
+            response_model=PaginateSystemModel,
+            description=SystemApiDescription.all_system_api
+            )
 async def get_all_systems(request: Request,
                           page: Annotated[int, Query(description=PagingDescription.page)] = 0,
                           limit: Annotated[int, Query(description=PagingDescription.limit)] = 50,

@@ -7,6 +7,10 @@ class SystemModel(BaseModel):
     description: str
 
 
+class SystemListModel(BaseModel):
+    result: list[SystemModel]
+
+
 class PaginateSystemModel(BaseModel):
     result: list[SystemModel]
     page: int

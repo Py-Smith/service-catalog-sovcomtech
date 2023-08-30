@@ -8,6 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from db.postgres import get_session
 from db.redis import get_redis
 from models.database.system import System, SystemCategory
+from models.response.category import CategoryModel, PaginateCategoryModel
+from models.response.system import SystemListModel, SystemModel
 from utils.cache import get_data_from_cache
 
 
@@ -18,20 +20,21 @@ class SystemCategoryInfoService:
         self.redis = redis
 
     @get_data_from_cache
-    async def get_all_categories(self, request: Request) -> list:
+    async def get_all_categories(self, *, request: Request, page: int, limit: int) -> PaginateCategoryModel:
         """Get information about all systems"""
         query = await self.session.execute(
             select(SystemCategory.id,
                    SystemCategory.name,
                    SystemCategory.description
                    )
-            .select_from(SystemCategory))
+            .select_from(SystemCategory).offset(page * limit).limit(limit))
         result: list = [dict(c) for c in query.mappings().all()]
-        return result
+        model = PaginateCategoryModel(result=result, page=page, limit=limit, count=len(result))
+        return model
 
     # TODO: подумать как убрать паараметр request: Request из функции
     @get_data_from_cache
-    async def get_category_info_by_id(self, request: Request, category_id: int) -> dict:
+    async def get_category_info_by_id(self, *, request: Request, category_id: int) -> CategoryModel:
         """Get information about system by id"""
         query = await self.session.execute(
             select(SystemCategory.id,
@@ -41,15 +44,12 @@ class SystemCategoryInfoService:
             .select_from(SystemCategory)
             .where(SystemCategory.id == category_id))
 
-        try:
-            result: dict = dict(query.mappings().first())  # type: ignore
-            return result
-        except TypeError:
-            return {}
+        result: dict = dict(query.mappings().first())  # type: ignore
+        return CategoryModel(**result)
 
     # TODO: подумать как убрать паараметр request: Request из функции
     @get_data_from_cache
-    async def get_system_category_by_id(self, request: Request, category_id: int) -> list:
+    async def get_system_category_by_id(self, *, request: Request, category_id: int) -> SystemListModel:
         """Get information about system by id"""
         query = await self.session.execute(
             select(System.id,
@@ -59,11 +59,8 @@ class SystemCategoryInfoService:
             .select_from(System)
             .where(System.category_id == category_id))
 
-        try:
-            result: list = [dict(c) for c in query.mappings().all()]
-            return result
-        except TypeError:
-            return []
+        result: list = [SystemModel(**dict(c)) for c in query.mappings().all()]
+        return SystemListModel(result=result)
 
 
 @lru_cache()
