@@ -9,7 +9,9 @@ from db.postgres import get_session
 from db.redis import get_redis
 from models.database.system import (MethodProvidingService, PyrusUsers,
                                     Service, System, SystemService, Timetable)
-from models.response.system import PaginateSystemModel, SystemModel
+from models.response.system import (PaginateSystemModel, SystemErrorModel,
+                                    SystemModel, SystemServiceListModel,
+                                    SystemServiceModel)
 from utils.cache import get_data_from_cache
 
 
@@ -35,9 +37,8 @@ class SystemInfoService:
         return model
 
     @get_data_from_cache
-    async def get_system_info(self, *, request: Request, system_id: int) -> dict:
+    async def get_system_info(self, *, request: Request, system_id: int) -> SystemModel | SystemErrorModel:
         """Get information about system by id"""
-
         query = await self.session.execute(
             select(System.id,
                    System.name,
@@ -46,14 +47,11 @@ class SystemInfoService:
             .select_from(System)
             .where(System.id == system_id))
 
-        try:
-            result: dict = dict(query.mappings().first())  # type: ignore
-            return result
-        except TypeError:
-            return {}
+        result: SystemModel = dict(query.mappings().first())  # type: ignore
+        return SystemModel(**result)
 
     @get_data_from_cache
-    async def get_system_service_info(self, *, request: Request, system_id: int) -> list:
+    async def get_system_service_info(self, *, request: Request, system_id: int) -> list[SystemServiceModel]:
         """Get information about system by id"""
 
         query = await self.session.execute(
@@ -84,11 +82,8 @@ class SystemInfoService:
             .join(MethodProvidingService, SystemService.method_providing_service_id == MethodProvidingService.id)
             .where(SystemService.system_id == system_id))
 
-        try:
-            result: list = [dict(c) for c in query.mappings().all()]  # type: ignore
-            return result
-        except TypeError:
-            return []
+        result: list = [SystemServiceModel(**dict(c)) for c in query.mappings().all()]  # type: ignore
+        return SystemServiceListModel(result=result)
 
 
 @lru_cache()
