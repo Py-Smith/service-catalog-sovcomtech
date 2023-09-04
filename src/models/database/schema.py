@@ -108,3 +108,19 @@ class MethodProvidingService(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     description = Column(String)
+
+
+class PyrusForms(Base):
+    __tablename__ = 'admin_panel_pyrusforms'
+
+    id = Column(Integer, primary_key=True, index=True)
+    form_id = Column(Integer)
+    form_name = Column(String)
+
+
+class SystemServiceForms(Base):
+    __tablename__ = 'admin_panel_systemservice_forms'
+
+    id = Column(Integer, primary_key=True, index=True)
+    systemservice_id = Column(Integer, ForeignKey('SystemService.id'))
+    pyrusforms_id = Column(Integer, ForeignKey('PyrusForms.id'))

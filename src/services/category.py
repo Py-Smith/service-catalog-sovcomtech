@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.postgres import get_session
 from db.redis import get_redis
-from models.database.system import System, SystemCategory
+from models.database.schema import System, SystemCategory
 from models.response.category import CategoryModel, PaginateCategoryModel
 from models.response.system import SystemListModel, SystemModel
 from utils.cache import get_data_from_cache

@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.postgres import get_session
 from db.redis import get_redis
-from models.database.system import (CompetenceTeams, MainTeams,
+from models.database.schema import (CompetenceTeams, MainTeams,
                                     SystemServiceCompetenceTeams,
                                     SystemServiceMainTeams)
 from models.response.teams import (CompetenceTeamsListModel,

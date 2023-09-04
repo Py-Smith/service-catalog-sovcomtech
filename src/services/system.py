@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.postgres import get_session
 from db.redis import get_redis
-from models.database.system import (MethodProvidingService, PyrusUsers,
+from models.database.schema import (MethodProvidingService, PyrusUsers,
                                     Service, System, SystemService, Timetable)
 from models.response.system import (PaginateSystemModel, SystemErrorModel,
                                     SystemModel, SystemServiceListModel,

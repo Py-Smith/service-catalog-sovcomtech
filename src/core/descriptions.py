@@ -19,3 +19,8 @@ class CategoryDescription:
     all_category_api: str = 'Информация о всех категориях систем/оборудования по которым предоставляется услуга'
     category_by_id_api: str = 'Получение информации о категории по ее ID'
     system_in_category_by_id_api: str = 'Получение списка систем/оборудования которые входят в категорию'
+
+
+class FormsDescription:
+    form_by_id_api: str = 'Информация по форме по ее ИД'
+    form_by_system_service_id_api: str = 'Список форм по которым предоставляется услуга'

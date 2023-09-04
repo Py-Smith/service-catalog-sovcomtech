@@ -71,6 +71,7 @@ class SystemService(models.Model):
     system_service_main_teams = models.ManyToManyField('SystemServiceMainTeams', blank=True)
     system_service_competence_teams = models.ManyToManyField('SystemServiceСompetenceTeams', blank=True)
     method_providing_service = models.ForeignKey('MethodProvidingService', on_delete=models.CASCADE, default=1)
+    forms = models.ManyToManyField('PyrusForms', blank=True)
 
     class Meta:
         verbose_name = "Услуги для системы"
@@ -134,18 +135,6 @@ class PyrusForms(models.Model):
 
     def __str__(self) -> str:
         return f'{self.form_id} | {self.form_name} '
-
-
-class SystemServicePyrusForms(models.Model):
-    form = models.ForeignKey(PyrusForms, on_delete=models.CASCADE, blank=True, null=True)
-    system_service = models.ManyToManyField('SystemService', blank=True)
-
-    class Meta:
-        verbose_name = "Формы по которым предоставляются услуги"
-        verbose_name_plural = "Формы по которым предоставляются услуги"
-
-    def __str__(self) -> str:
-        return f'{self.form} | {self.system_service}'
 
 
 class TimeTable(models.Model):
