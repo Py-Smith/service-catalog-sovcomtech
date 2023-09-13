@@ -9,10 +9,7 @@ from api.v1 import category, forms, system, teams
 from core.config import settings
 from db import elastic, redis
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8080",
+    '*'
 ]
 
 
