@@ -50,7 +50,15 @@ export default {
           })
           .catch((error) => console.log(error))
     },
-    getTeamsService(id) {
+    getMainTeamsService(id) {
+      this.$axios
+          .get(this.$HttpApiAddress + 'teams/' + id + '/main_teams')
+          .then((response) => {
+            this.competenceTeams = response.data.result
+          })
+          .catch((error) => console.log(error))
+    },
+    getСompetenceTeamsService(id) {
       this.$axios
           .get(this.$HttpApiAddress + 'teams/' + id + '/competence_teams')
           .then((response) => {
@@ -229,7 +237,8 @@ export default {
                                             <ul class="nav nav-tabs ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
                                               <li class="active">
                                                 <a href="#first-tab-content2" data-toggle="tab">Описание</a></li>
-                                              <li><a href="#second-tab-content2" @click="getTeamsService(serice.service.id)" data-toggle="tab">Исполнители</a></li>
+                                              <li><a href="#second-tab-content2" @click="getMainTeamsService(serice.service.id)" data-toggle="tab">Основные команды</a></li>
+                                              <li><a href="#second-tab-content2" @click="getСompetenceTeamsService(serice.service.id)" data-toggle="tab">Команды компетенций</a></li>
                                               <li><a href="#fifth-tab-content2" @click="getformsService(serice.service.id)" data-toggle="tab">Формы</a></li>
 
                                               <li style="float: right">
