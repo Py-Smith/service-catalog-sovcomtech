@@ -5,6 +5,7 @@
 # Apply Migration
 python3 manage.py makemigrations --noinput
 python3 manage.py migrate --noinput
+python3 manage.py collectstatic
 
 # Compile locale
 #python3 manage.py compilemessages -l en -l ru 
