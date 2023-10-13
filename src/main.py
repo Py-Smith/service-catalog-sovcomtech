@@ -9,9 +9,11 @@ from api.v1 import category, forms, system, teams
 from core.config import settings
 from db import elastic, redis
 
+
 origins = [
     '*'
 ]
+
 
 
 app = FastAPI(
@@ -24,7 +26,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
