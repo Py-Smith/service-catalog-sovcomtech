@@ -184,7 +184,7 @@ class PyrusUsers(models.Model):
 
 class MethodProvidingService(models.Model):
     name = models.CharField(max_length=255, null=False, blank=True)
-    description = models.CharField(max_length=2048, null=False, blank=True)
+    description = models.CharField(max_length=512, null=False, blank=True)
 
     class Meta:
         verbose_name = "Справочник способов предоставления услуги"
